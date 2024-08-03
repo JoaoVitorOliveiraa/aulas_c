@@ -1,0 +1,85 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@ * @;
+
+
+1.2
+date	2024.05.10.17.57.17;	author joao.vitor;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2024.05.10.03.00.44;	author joao.vitor;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@Remocao de condicao if
+@
+text
+@/*******************************************************************************
+ *
+ * Universidade Federal do Rio de Janeiro
+ * Escola Politecnica
+ * Departamento de Eletronica e de Computacao
+ * Prof. Marcelo Luiz Drumond Lanza
+ * EEL270 - Computacao II - Turma 2024/1
+ *
+ * Descricao: Arquivo responsavel pelo cabecalho da funcao "CalcularTermoSerieFibonacci". Neste caso, foi utilizado recursividade em seu calculo.
+ *
+ * $Author: joao.vitor $
+ * $Date: 2024/05/10 03:00:44 $
+ * $Log: aula0301a.c,v $
+ * Revision 1.1  2024/05/10 03:00:44  joao.vitor
+ * Initial revision
+ *
+ *
+ *******************************************************************************/
+
+#include "aula0301.h"
+
+/*Cabecalho da Funcao "CalcularTermoSerieFibonacci".*/
+ull
+CalcularTermoSerieFibonacci (us limiteSuperior)
+{	
+	/*Caso o numero inserido for menor ou igual a zero, a funcao retorna o proprio numero.*/
+	if (limiteSuperior <= 1)
+		return limiteSuperior;
+
+	/*Caso nao ultrapasse, a funcao retorna a soma de duas recursoes.*/
+	return CalcularTermoSerieFibonacci(limiteSuperior-1) + CalcularTermoSerieFibonacci(limiteSuperior-2);
+}
+
+/* $RCSfile: aula0301a.c,v $ */
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@a0 1
+
+d11 6
+a16 3
+ * $Author$
+ * $Date$
+ * $Log$
+a28 4
+	
+	/*Caso o resultado da funcao ultrapasse o limite do tipo unsigned long long, a funcao retorna um valor de erro. */
+	if ((CalcularTermoSerieFibonacci(limiteSuperior-1) + CalcularTermoSerieFibonacci(limiteSuperior-2)) > ULLONG_MAX)
+		return VALOR_ULTRAPASSOU_LIMITE_UNSIGNED_LONG_LONG;
+d34 1
+a34 1
+/* $RCSfile$ */
+@

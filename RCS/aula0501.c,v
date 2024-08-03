@@ -1,0 +1,350 @@
+head	1.6;
+access;
+symbols;
+locks; strict;
+comment	@ * @;
+
+
+1.6
+date	2024.06.10.09.06.44;	author joao.vitor;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2024.06.10.08.55.46;	author joao.vitor;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2024.06.10.07.30.42;	author joao.vitor;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2024.06.10.05.06.37;	author joao.vitor;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2024.06.10.03.26.15;	author joao.vitor;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2024.06.06.18.34.24;	author joao.vitor;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@atualizacao da funcao CalcularComplementoAlgebrico
+@
+text
+@/*******************************************************************************
+ *
+ * Universidade Federal do Rio de Janeiro
+ * Escola Politecnica
+ * Departamento de Eletronica e de Computacao
+ * Prof. Marcelo Luiz Drumond Lanza
+ * EEL270 - Computacao II - Turma 2024/1
+ *
+ * Descricao: Arquivo responsavel pelo cabecalho de funcoes.
+ *
+ * $Author: joao.vitor $
+ * $Date: 2024/06/10 08:55:46 $
+ * $Log: aula0501.c,v $
+ * Revision 1.5  2024/06/10 08:55:46  joao.vitor
+ * atualizacao da funcao CalcularMenorComplementar
+ *
+ * Revision 1.4  2024/06/10 07:30:42  joao.vitor
+ * adicoes das funcoes CalcularMenorComplementar, CalcularComplementoAlgebrico e CalcularDeterminanteMatriz
+ *
+ * Revision 1.3  2024/06/10 05:06:37  joao.vitor
+ * adicao da funcao ObterMatrizTransposta
+ * ,
+ *
+ * Revision 1.2  2024/06/10 03:26:15  joao.vitor
+ * adicao da funcao MultiplicarMatrizes
+ *
+ * Revision 1.1  2024/06/06 18:34:24  joao.vitor
+ * Initial revision
+ *
+ *
+ *******************************************************************************/
+
+#include "aula0501.h"
+
+/*Cabecalho da funcao "ExibirMatriz".*/
+tipoErros
+ExibirMatriz (us quantidadeDeLinhas, us quantidadeDeColunas, ld matriz [quantidadeDeLinhas][quantidadeDeColunas])
+{	
+	/*Inicializacao das variaveis.*/
+	us linha, coluna;
+	
+	/*Condicao que verifica se o usuario inseriu uma matriz com um endereco invalido.*/
+	if (!matriz)
+		return enderecoDaMatrizInvalido;
+	
+	/*Quebra de linha.*/
+	printf ("\n");
+
+	/*Estrutura de Repeticao que passa por todas as linhas da matriz.*/
+	for (linha = 0; linha < quantidadeDeLinhas; linha++)
+	{
+		/*Impressao do traco verde na tela.*/
+		printf ("%s|%s", BOLD_GREEN, RESET);
+
+		/*Estrutura de Repeticao que passa por todas as colunas da matriz, exibindo seus elementos.*/
+		for (coluna = 0; coluna < quantidadeDeColunas; coluna++)
+		{
+			if (coluna == (quantidadeDeColunas-1))
+				printf ("%.10Lf", matriz [linha][coluna]);
+			
+			else
+				printf ("%.10Lf\t\t", matriz [linha][coluna]);			
+		}
+			
+		/*Impressao do traco verde na tela e quebra de linha.*/
+		printf ("%s|%s\n", BOLD_GREEN, RESET);
+	}
+
+	/*Quebra de linha.*/
+	printf ("\n");
+
+	return ok;
+}
+
+
+/*Cabecalho da funcao "MultiplicarMatrizes".*/
+tipoErros
+MultiplicarMatrizes (us quantidadeLinhasMatrizA, us quantidadeColunasMatrizA, us quantidadeLinhasMatrizB, us quantidadeColunasMatrizB,
+			ld matrizA [quantidadeLinhasMatrizA][quantidadeColunasMatrizA],
+			ld matrizB [quantidadeLinhasMatrizB][quantidadeColunasMatrizB],
+			ld matrizProduto [quantidadeLinhasMatrizA][quantidadeColunasMatrizB])
+{
+	/*Inicializacao das variaveis.*/
+	us linha, coluna, numeroAuxiliar;
+
+	/*Condicao que verifica se o usuario inseriu as matrizes A e B com enderecos invalidos.*/
+	if ((!matrizA) && (!matrizB))
+		return enderecosDasMatrizesInvalidos;
+
+	/*Condicao que verifica se o usuario inseriu somente a matriz A com um endereco invalido.*/
+	if (!matrizA)
+		return enderecoDaMatrizAInvalido;
+
+	/*Condicao que verifica se o usuario inseriu somente a matriz B com um endereco invalido.*/
+	if (!matrizB)
+		return enderecoDaMatrizBInvalido;
+
+	/*Condicao que verifica se o usuario inseriu matrizes compativeis para a realizacao do produto.*/
+	if (quantidadeColunasMatrizA != quantidadeLinhasMatrizB)
+		return matrizesIncompativeis;
+
+	/*Inicializa a matriz produto com zeros.*/
+	for (linha = 0; linha < quantidadeLinhasMatrizA; linha++)
+		for (coluna = 0; coluna < quantidadeColunasMatrizB; coluna++)
+			matrizProduto [linha][coluna] = 0;
+
+	/*Efetua a multiplicacao entre as matrizes A e B, e armazena o valor na matriz produto.*/
+	for (linha = 0; linha < quantidadeLinhasMatrizA; linha++)
+		for(coluna = 0; coluna < quantidadeColunasMatrizB; coluna++)
+			for (numeroAuxiliar = 0; numeroAuxiliar < quantidadeColunasMatrizA; numeroAuxiliar++)
+				matrizProduto [linha][coluna] += (matrizA [linha][numeroAuxiliar] * matrizB [numeroAuxiliar][coluna]);
+
+	return ok;
+}
+
+
+/*Cabecalho da funcao "ObterMatrizTransposta".*/
+tipoErros
+ObterMatrizTransposta (us numeroLinhas, us numeroColunas, ld matrizInicial [numeroLinhas][numeroColunas], ld matrizTransposta [numeroColunas][numeroLinhas])
+{
+	/*Inicializacao das variaveis.*/
+	us linha, coluna;
+
+	/*Condicao que verifica se o usuario inseriu uma matriz com um endereco invalido.*/
+	if (!matrizInicial)
+		return enderecoDaMatrizInvalido;
+
+	/*Efetua a transposicao da matriz inicial.*/
+	for (linha = 0; linha < numeroLinhas; linha++)
+		for (coluna = 0; coluna < numeroColunas; coluna++)
+			matrizTransposta [coluna][linha] = matrizInicial [linha][coluna]; 
+
+	return ok;
+}
+
+
+/*Cabecalho da funcao "CalcularDeterminanteMatriz".*/
+tipoErros
+CalcularDeterminanteMatriz (us ordemDaMatriz, ld matriz [ordemDaMatriz][ordemDaMatriz], ld *determinante)
+{
+	/*Inicializacao das variaveis.*/
+	us numeroAuxiliar;
+	ld complementoAlgebrico;
+	
+	/*Condicao que verifica se o usuario inseriu uma matriz com um endereco invalido.*/
+	if (!matriz)
+		return enderecoDaMatrizInvalido;
+
+	/*Calculo do determinante de uma matriz de ordem um.*/
+	if (ordemDaMatriz  == 1)
+		*determinante = matriz[0][0];
+
+	/*Calculo do determinante de uma matriz de ordem dois.*/
+	else if (ordemDaMatriz == 2)
+		*determinante = (matriz[0][0] * matriz[1][1]) - (matriz[0][1] * matriz[1][0]);
+	
+	/*Calculo do determinante de uma matriz de ordem tres.*/
+	else if (ordemDaMatriz == 3)
+	{
+		*determinante =	(matriz[0][0] * matriz[1][1] * matriz[2][2]) + (matriz[0][1] * matriz[1][2] * matriz[2][0]) + (matriz[0][2] * matriz[1][0] * matriz[2][1]) - (matriz[0][2] * matriz[1][1] * matriz[2][0]) - (matriz[0][1] * matriz[1][0] * matriz[2][2]) - (matriz[0][0] * matriz[1][2] * matriz[2][1]);
+	}
+					
+	else
+	{
+		*determinante = 0;
+		for (numeroAuxiliar = 0; numeroAuxiliar < ordemDaMatriz; ++numeroAuxiliar) 
+		{
+			CalcularComplementoAlgebrico (ordemDaMatriz, 0, numeroAuxiliar, matriz, &complementoAlgebrico);
+			*determinante += matriz[0][numeroAuxiliar] * complementoAlgebrico;
+		}
+	}
+
+	return ok;
+}
+
+/*Cabecalho da funcao "CalcularMenorComplementar".*/
+tipoErros
+CalcularMenorComplementar(us ordemDaMatriz, us linhaDoElemento, us colunaDoElemento, ld matriz [ordemDaMatriz][ordemDaMatriz], ld *valorMenorComplementar) 
+{
+	/*Inicializacao da variaveis.*/
+	us linha, coluna;
+	us linhaMenorComplemento, colunaMenorComplemento;
+	ld matrizMenorComplementar [ordemDaMatriz-1][ordemDaMatriz-1];
+
+	linhaMenorComplemento = 0;
+	colunaMenorComplemento = 0;
+
+	/*Condicao que verifica se o usuario inseriu uma matriz com um endereco invalido.*/
+	if (!matriz)
+		return enderecoDaMatrizInvalido;
+	
+	/*Efetua o calculo.*/
+	for (linha = 0; linha < ordemDaMatriz; linha++)
+	{
+		for (coluna = 0; coluna < ordemDaMatriz; coluna++)
+			if ((linha != linhaDoElemento) && (coluna != colunaDoElemento))
+			{
+				matrizMenorComplementar [linhaMenorComplemento][colunaMenorComplemento] = matriz [linha][coluna];
+				colunaMenorComplemento++;
+
+				if (colunaMenorComplemento == (ordemDaMatriz-1))
+				{
+					colunaMenorComplemento = 0;
+					linhaMenorComplemento++;
+				}
+			}
+	}
+	
+	CalcularDeterminanteMatriz (ordemDaMatriz-1, matrizMenorComplementar, valorMenorComplementar);
+
+	return ok;
+}
+
+/*Cabecalho da funcao "CalcularComplementoAlgebrico".*/
+tipoErros
+CalcularComplementoAlgebrico(us ordemDaMatriz,  us linhaDoElemento, us colunaDoElemento, ld matriz [ordemDaMatriz][ordemDaMatriz], ld *complementoAlgebrico) 
+{
+	ld valorMenorComplementar;
+	CalcularMenorComplementar (ordemDaMatriz, linhaDoElemento, colunaDoElemento, matriz, &valorMenorComplementar);
+	*complementoAlgebrico = ((linhaDoElemento + colunaDoElemento) % 2 == 0 ? 1 : -1) * valorMenorComplementar;	
+	
+	return ok;
+}
+
+/* $RCSfile: aula0501.c,v $ */
+@
+
+
+1.5
+log
+@atualizacao da funcao CalcularMenorComplementar
+@
+text
+@d12 1
+a12 1
+ * $Date: 2024/06/10 07:30:42 $
+d14 3
+d218 4
+@
+
+
+1.4
+log
+@adicoes das funcoes CalcularMenorComplementar, CalcularComplementoAlgebrico e CalcularDeterminanteMatriz
+@
+text
+@d12 1
+a12 1
+ * $Date: 2024/06/10 05:06:37 $
+d14 3
+d175 1
+a175 1
+CalcularMenorComplementar(us ordemDaMatriz, us linhaDoElemento, us colunaDoElemento, ld matriz [ordemDaMatriz][ordemDaMatriz], ld *menorComplementar) 
+d177 31
+@
+
+
+1.3
+log
+@adicao da funcao ObterMatrizTransposta
+,
+@
+text
+@d12 1
+a12 1
+ * $Date: 2024/06/10 03:26:15 $
+d14 4
+d130 54
+@
+
+
+1.2
+log
+@adicao da funcao MultiplicarMatrizes
+@
+text
+@d12 1
+a12 1
+ * $Date: 2024/06/06 18:34:24 $
+d14 3
+d106 20
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d9 7
+a15 1
+ * Descricao: Arquivo responsavel pelo cabecalho da funcao "ExibirMatriz".
+a16 3
+ * $Author$
+ * $Date$
+ * $Log$
+d22 1
+a22 1
+/*Cabecalho da Funcao "ExibirMatriz".*/
+d62 42
+a103 1
+/* $RCSfile$ */
+@

@@ -1,0 +1,379 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@ * @;
+
+
+1.1
+date	2024.06.10.06.02.33;	author joao.vitor;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@/*******************************************************************************
+ *
+ * Universidade Federal do Rio de Janeiro
+ * Escola Politecnica
+ * Departamento de Eletronica e de Computacao
+ * Prof. Marcelo Luiz Drumond Lanza
+ * EEL270 - Computacao II - Turma 2024/1
+ *
+ * Descricao: Codigo-Fonte de um programa de testes para a funcao "MultiplicarMatrizes".
+ *
+ * $Author$
+ * $Date$
+ * $Log$
+ *
+ *******************************************************************************/
+
+/*Include's.*/
+#include <stdlib.h>
+#include <limits.h>
+#include <errno.h>
+#include <float.h>
+
+#include "aula0501.h"
+
+/*Definicao das Macros.*/
+#define SUCESSO								0
+#define NUMERO_ARGUMENTOS_VALIDOS					3 + (NUMERO_MAXIMO_LINHAS * NUMERO_MAXIMO_COLUNAS)
+					
+#define NUMERO_ARGUMENTOS_INVALIDO					1
+#define ARGUMENTO_INSERIDO_INVALIDO					2
+#define NUMERO_ULTRAPASSOU_LIMITE_LONG					3
+#define INSERIDO_NUMERO_NEGATIVO					4
+#define NUMERO_ULTRAPASSOU_LIMITE_UNSIGNED_INT				5
+#define	NUMERO_LINHAS_E_COLUNAS_ULTRAPASSADO				6
+#define	NUMERO_LINHAS_ULTRAPASSADO					7
+#define	NUMERO_COLUNAS_ULTRAPASSADO					8
+#define NUMERO_ULTRAPASSOU_LIMITE_LONG_DOUBLE				9
+
+#define END_OF_STRING							'\0'
+
+/*Inicializacao da Funcao Principal.*/
+int
+main (int argc, char *argv [])
+{
+	/*Inicializacao das variaveis.*/
+	us linha, coluna, indexInicial;
+	us tamanhoLinhasMatrizAConvertido, tamanhoColunasMatrizAConvertido;
+	us tamanhoLinhasMatrizBConvertido, tamanhoColunasMatrizBConvertido;
+	long tamanhoLinhasMatrizA, tamanhoColunasMatrizA;
+	long tamanhoLinhasMatrizB, tamanhoColunasMatrizB;
+	char *validacaoTamanhoLinhasMatrizA, *validacaoTamanhoColunasMatrizA;
+	char *validacaoTamanhoLinhasMatrizB, *validacaoTamanhoColunasMatrizB;
+	char *validacaoMatrizA, *validacaoMatrizB;
+
+	/*Caso o numero de argumentos inseridos for invalido, aparecera uma mensagem de erro.*/
+	if ((argc > NUMERO_ARGUMENTOS_VALIDOS) || (argc < 3))
+	{
+		printf ("\n%sErro! Numero invalido de argumentos.%s\n\n", RED, RESET);
+		exit (NUMERO_ARGUMENTOS_INVALIDO);
+	}
+	
+	/*Converte o tamanho inserido em um valor real do tipo long.*/
+	tamanhoLinhasMatrizA = strtol(argv [1], &validacaoTamanhoLinhasMatrizA, 10);
+	
+	/*Caso o tamanho inserido nao for um numero, aparecera uma mensagem de erro.*/
+	if (*validacaoTamanhoLinhasMatrizA != END_OF_STRING)
+	{
+		printf ("\n%sErro! Numero de linhas da matriz A invalido.%s\n\n", RED, RESET);
+		exit (ARGUMENTO_INSERIDO_INVALIDO);
+	}
+	
+	/*Caso o numero de linhas matriz A ultrapasse o limite do tipo long, aparecera uma mensagem de erro.*/	
+	if (errno == ERANGE)
+	{
+		printf ("\n%sErro! O numero de linhas da matriz A excedeu o limite do tipo Long (%ld).%s\n\n", RED, LONG_MAX, RESET); 
+		exit (NUMERO_ULTRAPASSOU_LIMITE_LONG);
+	}
+
+	/*Caso os numeros de linhas e colunas da matriz A forem negativos, aparecera uma mensagem de erro.*/
+	if ((argv [1][0] == '-') && (argv [2][0] == '-'))
+	{
+		printf ("\n%sErro! Ambos os numeros de linhas e colunas da matriz A sao invalidos.\nPor favor, insira somente numeros positivos.%s\n\n", RED, RESET);
+		exit (INSERIDO_NUMERO_NEGATIVO);
+	}	
+
+	/*Caso somente o numeros de linhas da matriz A for negativo, aparecera uma mensagem de erro.*/
+	if ((argv [1][0] == '-') && (argv[2][0] != '-'))
+	{
+		printf ("\n%sErro! Numero de linhas da matriz A invalido.\nPor favor, insira somente numeros positivos.%s\n\n", RED, RESET);
+		exit (INSERIDO_NUMERO_NEGATIVO);
+	}	
+
+	/*Converte o tamanho inserido em um valor inteiro do tipo long.*/
+	tamanhoColunasMatrizA = strtol(argv [2], &validacaoTamanhoColunasMatrizA, 10);
+	
+	/*Caso o tamanho inserido nao for um numero, aparecera uma mensagem de erro.*/
+	if (*validacaoTamanhoColunasMatrizA != END_OF_STRING)
+	{
+		printf ("\n%sErro! Numero de colunas da matriz A invalido.%s\n\n", RED, RESET);
+		exit (ARGUMENTO_INSERIDO_INVALIDO);
+	}
+		
+	/*Caso o tamanho de colunas da matriz A ultrapasse o limite do tipo long, aparecera uma mensagem de erro.*/	
+	if (errno == ERANGE)
+	{
+		printf ("\n%sErro! O numero de colunas da matriz B excedeu o limite do tipo Long (%ld).%s\n\n", RED, LONG_MAX, RESET); 
+		exit (NUMERO_ULTRAPASSOU_LIMITE_LONG);
+	}
+	
+	/*Caso somente o numeros de colunas da matriz A for negativo, aparecera uma mensagem de erro.*/
+	if ((argv [1][0] != '-') && (argv[2][0] == '-'))
+	{
+		printf ("\n%sErro! Numero de colunas da matriz A invalido.\nPor favor, insira somente numeros positivos.%s\n\n", RED, RESET);
+		exit (INSERIDO_NUMERO_NEGATIVO);
+	}	
+	
+	/*Caso o tamanho dos numeros de linhas e colunas da matriz A estejam fora do limite do tipo unsigned int, aparecera uma mensagem de erro.*/
+	if ((tamanhoLinhasMatrizA > USHRT_MAX) && (tamanhoColunasMatrizA > USHRT_MAX))
+	{ 
+		printf ("\n%sErro! Os numeros de linhas e colunas da matriz A ultrapassaram o limite do tipo Unsigned Short (%d).%s\n\n", RED, USHRT_MAX, RESET);
+		exit (NUMERO_ULTRAPASSOU_LIMITE_UNSIGNED_INT);
+	}
+
+	/*Caso o tamanho do numero de linhas da matriz A esteja fora do limite do tipo unsigned int, aparecera uma mensagem de erro.*/
+	if (tamanhoLinhasMatrizA > USHRT_MAX) 
+	{ 
+		printf ("\n%sErro! O numero de linhas da matriz A ultrapassou o limite do tipo Unsigned Short (%d).%s\n\n", RED, USHRT_MAX, RESET);
+		exit (NUMERO_ULTRAPASSOU_LIMITE_UNSIGNED_INT);
+	}
+
+	/*Caso o tamanho do numero de colunas da matriz A esteja fora do limite do tipo unsigned int, aparecera uma mensagem de erro.*/
+	if (tamanhoColunasMatrizA > USHRT_MAX) 
+	{ 
+		printf ("\n%sErro! O numero de colunas da matriz A ultrapassou o limite do tipo Unsigned Short (%d).%s\n\n", RED, USHRT_MAX, RESET);
+		exit (NUMERO_ULTRAPASSOU_LIMITE_UNSIGNED_INT);
+	}
+
+	/*Armazena o valor da conversao de tipo do tamanho de linhas da matriz A (long para unsigned int).*/
+	tamanhoLinhasMatrizAConvertido = (us) tamanhoLinhasMatrizA;
+	
+	/*Armazena o valor da conversao de tipo do tamanho de colunas da matriz A (long para unsigned int).*/
+	tamanhoColunasMatrizAConvertido = (us) tamanhoColunasMatrizA;
+
+	/*Condicao que verifica se os limites de linhas e colunas da matriz A foram ultrapassados.*/
+	if ((tamanhoLinhasMatrizAConvertido > NUMERO_MAXIMO_LINHAS) && (tamanhoColunasMatrizAConvertido > NUMERO_MAXIMO_COLUNAS))
+	{
+		printf ("\n%sErro! Numeros de linhas e colunas da matriz A ultrapassaram o limite suportado%s", RED, RESET);
+		printf ("\n%sPor favor, insira um numero de linhas para a matriz A que esteja entre 1 e %d.%s", RED, NUMERO_MAXIMO_LINHAS, RESET);
+		printf ("\n%sPor favor, insira um numero de colunas para a matriz A que esteja entre 1 e %d.%s\n\n", RED, NUMERO_MAXIMO_COLUNAS, RESET);
+		exit (NUMERO_LINHAS_E_COLUNAS_ULTRAPASSADO);
+	}
+	
+	/*Condicao que verifica se somente o numero maximo de linhas da matriz A foi ultrapassado.*/
+	if (tamanhoLinhasMatrizAConvertido > NUMERO_MAXIMO_LINHAS)
+	{
+		printf ("\n%sErro! Numero de linhas da matriz A invalido.\nPor favor, insira um numero que esteja entre 1 e %d.%s\n\n", RED, NUMERO_MAXIMO_LINHAS, RESET);
+		exit (NUMERO_LINHAS_ULTRAPASSADO);
+	}
+
+	/*Condicao que verifica se somente o numero maximo de colunas da matriz A foi ultrapassado.*/
+	if (tamanhoColunasMatrizAConvertido > NUMERO_MAXIMO_COLUNAS)
+	{
+		printf ("\n%sErro! Numero de colunas da matriz A invalido.\nPor favor, insira um numero de colunas que esteja entre 1 e %d.%s\n\n", RED, NUMERO_MAXIMO_COLUNAS, RESET);
+		exit (NUMERO_COLUNAS_ULTRAPASSADO);
+	}
+
+	/*Converte o tamanho inserido em um valor real do tipo long.*/
+	tamanhoLinhasMatrizB = strtol(argv [3], &validacaoTamanhoLinhasMatrizB, 10);
+	
+	/*Caso o tamanho inserido nao for um numero, aparecera uma mensagem de erro.*/
+	if (*validacaoTamanhoLinhasMatrizB != END_OF_STRING)
+	{
+		printf ("\n%sErro! Numero de linhas da matriz B invalido.%s\n\n", RED, RESET);
+		exit (ARGUMENTO_INSERIDO_INVALIDO);
+	}
+	
+	/*Caso o numero de linhas matriz B ultrapasse o limite do tipo long, aparecera uma mensagem de erro.*/	
+	if (errno == ERANGE)
+	{
+		printf ("\n%sErro! O numero de linhas da matriz B excedeu o limite do tipo Long (%ld).%s\n\n", RED, LONG_MAX, RESET); 
+		exit (NUMERO_ULTRAPASSOU_LIMITE_LONG);
+	}
+
+	/*Caso os numeros de linhas e colunas da matriz B forem negativos, aparecera uma mensagem de erro.*/
+	if ((argv [3][0] == '-') && (argv [4][0] == '-'))
+	{
+		printf ("\n%sErro! Ambos os numeros de linhas e colunas da matriz B sao invalidos.\nPor favor, insira somente numeros positivos.%s\n\n", RED, RESET);
+		exit (INSERIDO_NUMERO_NEGATIVO);
+	}	
+
+	/*Caso somente o numeros de linhas da matriz B for negativo, aparecera uma mensagem de erro.*/
+	if ((argv [3][0] == '-') && (argv[4][0] != '-'))
+	{
+		printf ("\n%sErro! Numero de linhas da matriz B invalido.\nPor favor, insira somente numeros positivos.%s\n\n", RED, RESET);
+		exit (INSERIDO_NUMERO_NEGATIVO);
+	}	
+
+	/*Converte o tamanho inserido em um valor inteiro do tipo long.*/
+	tamanhoColunasMatrizB = strtol(argv [2], &validacaoTamanhoColunasMatrizB, 10);
+	
+	/*Caso o tamanho inserido nao for um numero, aparecera uma mensagem de erro.*/
+	if (*validacaoTamanhoColunasMatrizB != END_OF_STRING)
+	{
+		printf ("\n%sErro! Numero de colunas da matriz B invalido.%s\n\n", RED, RESET);
+		exit (ARGUMENTO_INSERIDO_INVALIDO);
+	}
+		
+	/*Caso o tamanho de colunas da matriz B ultrapasse o limite do tipo long, aparecera uma mensagem de erro.*/	
+	if (errno == ERANGE)
+	{
+		printf ("\n%sErro! O numero de colunas da matriz B excedeu o limite do tipo Long (%ld).%s\n\n", RED, LONG_MAX, RESET); 
+		exit (NUMERO_ULTRAPASSOU_LIMITE_LONG);
+	}
+	
+	/*Caso somente o numeros de colunas da matriz B for negativo, aparecera uma mensagem de erro.*/
+	if ((argv [3][0] != '-') && (argv[4][0] == '-'))
+	{
+		printf ("\n%sErro! Numero de colunas da matriz B invalido.\nPor favor, insira somente numeros positivos.%s\n\n", RED, RESET);
+		exit (INSERIDO_NUMERO_NEGATIVO);
+	}	
+	
+	/*Caso o tamanho dos numeros de linhas e colunas da matriz B estejam fora do limite do tipo unsigned int, aparecera uma mensagem de erro.*/
+	if ((tamanhoLinhasMatrizB > USHRT_MAX) && (tamanhoColunasMatrizB > USHRT_MAX))
+	{ 
+		printf ("\n%sErro! Os numeros de linhas e colunas da matriz B ultrapassaram o limite do tipo Unsigned Short (%d).%s\n\n", RED, USHRT_MAX, RESET);
+		exit (NUMERO_ULTRAPASSOU_LIMITE_UNSIGNED_INT);
+	}
+
+	/*Caso o tamanho do numero de linhas da matriz B esteja fora do limite do tipo unsigned int, aparecera uma mensagem de erro.*/
+	if (tamanhoLinhasMatrizB > USHRT_MAX) 
+	{ 
+		printf ("\n%sErro! O numero de linhas da matriz B ultrapassou o limite do tipo Unsigned Short (%d).%s\n\n", RED, USHRT_MAX, RESET);
+		exit (NUMERO_ULTRAPASSOU_LIMITE_UNSIGNED_INT);
+	}
+
+	/*Caso o tamanho do numero de colunas inserido esteja fora do limite do tipo unsigned int, aparecera uma mensagem de erro.*/
+	if (tamanhoColunasMatrizB > USHRT_MAX) 
+	{ 
+		printf ("\n%sErro! O numero de colunas da matriz B ultrapassou o limite do tipo Unsigned Short (%d).%s\n\n", RED, USHRT_MAX, RESET);
+		exit (NUMERO_ULTRAPASSOU_LIMITE_UNSIGNED_INT);
+	}
+
+	/*Armazena o valor da conversao de tipo do tamanho de linhas da matriz B (long para unsigned int).*/
+	tamanhoLinhasMatrizBConvertido = (us) tamanhoLinhasMatrizB;
+	
+	/*Armazena o valor da conversao de tipo do tamanho de colunas da matriz B (long para unsigned int).*/
+	tamanhoColunasMatrizBConvertido = (us) tamanhoColunasMatrizB;
+
+	/*Condicao que verifica se os limites de linhas e colunas da matriz B foram ultrapassados.*/
+	if ((tamanhoLinhasMatrizBConvertido > NUMERO_MAXIMO_LINHAS) && (tamanhoColunasMatrizBConvertido > NUMERO_MAXIMO_COLUNAS))
+	{
+		printf ("\n%sErro! Numeros de linhas e colunas da matriz B ultrapassaram o limite suportado%s", RED, RESET);
+		printf ("\n%sPor favor, insira um numero de linhas para a matriz B que esteja entre 1 e %d.%s", RED, NUMERO_MAXIMO_LINHAS, RESET);
+		printf ("\n%sPor favor, insira um numero de colunas para a matriz B que esteja entre 1 e %d.%s\n\n", RED, NUMERO_MAXIMO_COLUNAS, RESET);
+		exit (NUMERO_LINHAS_E_COLUNAS_ULTRAPASSADO);
+	}
+	
+	/*Condicao que verifica se somente o numero maximo de linhas da matriz B foi ultrapassado.*/
+	if (tamanhoLinhasMatrizBConvertido > NUMERO_MAXIMO_LINHAS)
+	{
+		printf ("\n%sErro! Numero de linhas da matriz B invalido.\nPor favor, insira um numero que esteja entre 1 e %d.%s\n\n", RED, NUMERO_MAXIMO_LINHAS, RESET);
+		exit (NUMERO_LINHAS_ULTRAPASSADO);
+	}
+
+	/*Condicao que verifica se somente o numero maximo de colunas da matriz B foi ultrapassado.*/
+	if (tamanhoColunasMatrizBConvertido > NUMERO_MAXIMO_COLUNAS)
+	{
+		printf ("\n%sErro! Numero de colunas da matriz B invalido.\nPor favor, insira um numero de colunas que esteja entre 1 e %d.%s\n\n", RED, NUMERO_MAXIMO_COLUNAS, RESET);
+		exit (NUMERO_COLUNAS_ULTRAPASSADO);
+	}
+
+	/*Condicao que verifica se o numeros de argumentos da matriz A se condiz.*/
+	if ((argc - 5 - tamanhoLinhasMatrizBConvertido * tamanhoColunasMatrizBConvertido) != (tamanhoLinhasMatrizAConvertido * tamanhoColunasMatrizAConvertido))
+	{
+		printf ("\n%sErro! A quantidade de argumentos da matriz A nao se adequa ao tamanho inserido (%hu X %hu).%s\n\n", RED, tamanhoLinhasMatrizAConvertido, tamanhoColunasMatrizAConvertido, RESET);
+		exit (NUMERO_ARGUMENTOS_INVALIDO);
+	}
+
+	/*Condicao que verifica se o numeros de argumentos da matriz B se condiz.*/
+	if ((argc - 5 - tamanhoLinhasMatrizAConvertido * tamanhoColunasMatrizAConvertido) != (tamanhoLinhasMatrizBConvertido * tamanhoColunasMatrizBConvertido))
+	{
+		printf ("\n%sErro! A quantidade de argumentos da matriz B nao se adequa ao tamanho inserido (%hu X %hu).%s\n\n", RED, tamanhoLinhasMatrizBConvertido, tamanhoColunasMatrizBConvertido, RESET);
+		exit (NUMERO_ARGUMENTOS_INVALIDO);
+	}
+
+	/*Inicializacao das matrizes e do index inicial das matrizes.*/
+	ld matrizA [tamanhoLinhasMatrizAConvertido][tamanhoColunasMatrizAConvertido];
+	ld matrizB [tamanhoLinhasMatrizBConvertido][tamanhoColunasMatrizBConvertido];
+	ld matrizProduto [tamanhoLinhasMatrizAConvertido][tamanhoColunasMatrizBConvertido];
+	indexInicial = 5;
+
+	/*Estrutura de Repeticao que valida a matriz A.*/
+	for (linha = 0; linha < tamanhoLinhasMatrizAConvertido; linha++)
+	{
+		for (coluna = 0; coluna < tamanhoColunasMatrizAConvertido; coluna++)
+		{
+			matrizA [linha][coluna] = strtold (argv[indexInicial], &validacaoMatrizA);
+			indexInicial++;
+
+			/*Caso a matriz A possui um argumento invalido, aparecera uma mensagem de erro.*/
+			if (*validacaoMatrizA != END_OF_STRING)
+			{
+				printf ("\n%sErro! A matriz A possui algum argumento invalido.%s\n\n", RED, RESET);
+				exit (ARGUMENTO_INSERIDO_INVALIDO);
+			}
+		}
+	}
+		
+	/*Caso algum argumento da matriz A ultrapasse o limite do tipo long double, aparecera uma mensagem de erro.*/	
+	if (errno == ERANGE)
+	{
+		printf ("\n%sErro! Algum argumento da matriz A excede os limites do tipo Long Double (%Lf).%s\n\n", RED, LDBL_MAX, RESET); 
+		exit (NUMERO_ULTRAPASSOU_LIMITE_LONG_DOUBLE);
+	}
+
+	/*Estrutura de Repeticao que valida a matriz B.*/
+	for (linha = 0; linha < tamanhoLinhasMatrizBConvertido; linha++)
+	{
+		for (coluna = 0; coluna < tamanhoColunasMatrizBConvertido; coluna++)
+		{
+			matrizB [linha][coluna] = strtold (argv[indexInicial], &validacaoMatrizB);
+			indexInicial++;
+
+			/*Caso a matriz B possui um argumento invalido, aparecera uma mensagem de erro.*/
+			if (*validacaoMatrizB != END_OF_STRING)
+			{
+				printf ("\n%sErro! A matriz B possui algum argumento invalido.%s\n\n", RED, RESET);
+				exit (ARGUMENTO_INSERIDO_INVALIDO);
+			}
+		}
+	}
+		
+	/*Caso algum argumento da matriz B ultrapasse o limite do tipo long double, aparecera uma mensagem de erro.*/	
+	if (errno == ERANGE)
+	{
+		printf ("\n%sErro! Algum argumento da matriz B excede os limites do tipo Long Double (%Lf).%s\n\n", RED, LDBL_MAX, RESET); 
+		exit (NUMERO_ULTRAPASSOU_LIMITE_LONG_DOUBLE);
+	}
+
+	/*Multiplica as matrizes A e B.*/
+	MultiplicarMatrizes (tamanhoLinhasMatrizAConvertido, tamanhoColunasMatrizAConvertido,
+				tamanhoLinhasMatrizBConvertido, tamanhoColunasMatrizBConvertido,
+				matrizA, matrizB, matrizProduto);
+
+	/*Exibicao das matrizes.*/
+	printf ("\nMatriz A:\n");
+	ExibirMatriz (tamanhoLinhasMatrizAConvertido, tamanhoColunasMatrizAConvertido, matrizA);
+	printf ("Matriz B:\n");
+	ExibirMatriz (tamanhoLinhasMatrizBConvertido, tamanhoColunasMatrizBConvertido, matrizB);
+	printf ("Matriz Produto entre A e B:\n");
+	ExibirMatriz (tamanhoLinhasMatrizAConvertido, tamanhoColunasMatrizBConvertido, matrizProduto);
+
+	return SUCESSO;
+}
+
+/* $RCSfile$ */
+@

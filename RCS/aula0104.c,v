@@ -1,0 +1,164 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@ * @;
+
+
+1.2
+date	2024.04.21.00.48.20;	author joao.vitor;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2024.04.20.08.23.25;	author joao.vitor;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@*** empty log message ***
+@
+text
+@/*******************************************************************************
+ *
+ * Universidade Federal do Rio de Janeiro
+ * Escola Politecnica
+ * Departamento de Eletronica e de Computacao
+ * Prof. Marcelo Luiz Drumond Lanza
+ * EEL270 - Computacao II - Turma 2024/1
+ *
+ * Descricao: Arquivo responsavel por exibir as "256" possiveis cores de um terminal.
+ *
+ * $Author: joao.vitor $
+ * $Date: 2024/04/20 08:23:25 $
+ * $Log: aula0104.c,v $
+ * Revision 1.1  2024/04/20 08:23:25  joao.vitor
+ * Initial revision
+ *
+ *
+ *******************************************************************************/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "aula0101.h"
+
+/*Definicao da macro "SUCESSO" e "TABULACAO_DA_TABELA".*/
+#define SUCESSO				0
+#define TABULACAO_DA_TABELA		1111
+
+/*Inicializacao da Funcao.*/
+int
+main()
+{
+	/*Inicializacao da Variavel "cor".*/
+	int cor;
+		
+	/*Quebra de Linha.*/
+	printf ("\n");
+	
+	/*Funcao que exibe um cabecalho de numeros, onde a quantidade e dada pelo numero inserido.*/	
+	ExibirCabecalho(80);
+	
+	/*Quebra de Linha.*/
+	printf ("\n");
+	
+	/*Estrutura de Repeticao que passa por todas as "256" possiveis cores.*/
+	for(cor = 0; cor <= 255; cor++)
+	{
+		/*Caso o valor da cor for multiplo de "16", serao exibidos na tela quatro numeros, onde suas cores possuem o valor zero.*/ 
+		/*Os quatro numeros sao definidos na macro "TABULACAO_DA_TABELA" e sao responsaveis pela tabulacao da tabela, 
+		 * tomando como referencia os "80" numeros que a funcao "ExibirCabecalho" exibe.*/ 
+		if (cor % 16 == 0)
+		{	
+			printf ("\e[38;5;%dm%d\e[38;5;%dm", 0, TABULACAO_DA_TABELA, 0);
+		} 
+		
+		/*Caso o valor da cor for menor que "10", o respectivo valor e exibido na tela, com dois zeros a sua esquerda.*/
+		if (cor < 10)
+		{
+			printf ("\e[38;5;%dm00%d\e[38;5;%dm ", cor, cor, cor);
+		}
+	
+		/*Caso o valor da cor for maior que "10" e menor que "100", o respectivo valor e exibido na tela, com um zero a sua esquerda.*/
+		if ((cor >= 10) && (cor < 100))
+		{
+			printf ("\e[38;5;%dm0%d\e[38;5;%dm ", cor, cor, cor);
+		}
+
+		/*Caso o valor da cor for maior que "100", o respectivo valor e exibido na tela, sem zeros a sua esquerda.*/
+		if (cor >= 100)
+		{
+			printf ("\e[38;5;%dm%d\e[38;5;%dm ", cor, cor, cor);
+		}
+		
+		/*Caso a numeracao da cor (equivalente a "cor + 1", por conta de seu valor inicial ser "0") for um valor multiplo de "16" (excluindo o zero), 
+		 * a linha se quebra no final, a fim de continuar a exibicao na linha seguinte.*/
+		if ((cor + 1) % 16 == 0)
+		{
+			printf ("\n");
+		}
+	}	
+
+	/*Quebra de Linha.*/
+	printf ("\n");
+
+	return SUCESSO; 	
+}	
+
+/* $RCSfile: aula0104.c,v $ */
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d11 6
+a16 3
+ * $Author$
+ * $Date$
+ * $Log$
+d21 3
+d25 3
+a27 2
+/*Definicao da macro "SUCESSO".*/
+#define SUCESSO		0
+d29 1
+a34 7
+
+	/*Estrutura de Repeticao que passa por todas as cores, de "1" a "255". A variavel "cor" representa cada cor.*/
+	for(cor = 0; cor < 256; ++cor)
+	{	
+		/*OB1S: Professor, tentei implementar a sequencia de escape que o senhor colocou no roteiro. Entretanto, por algum motivo, ela nao imprimia no terminal.
+		 * Assim, procurei outra sequencia de escape na internet. Desculpe qualquer transtorno.
+		 * OBS2: Respeitosamente, nao foi utilizado o ChatGPT na geracao da nova sequencia de escape (ela foi encontrada em um site).*/
+d36 19
+a54 2
+		/*Sequencia de escape dada no roteiro.*/
+		/*printf ("\e[38;5;%dm", cor);*/
+d56 11
+a66 2
+		/*Sequencia encontrada na internet.*/	
+		printf ("\033[38;5;%dm %3d\033[m", cor, cor);
+d68 8
+a75 1
+		/*Verifica se o numero da cor chegou no limite (borda) da "tabela de cores". Se chegou, a linha se quebra, continuando a sequencia na linha de baixo.*/
+a77 1
+			/*Efetua a quebra das linhas.*/
+d80 7
+a86 3
+	}
+	return SUCESSO;
+}
+d88 1
+a88 1
+/* $RCSfile$ */
+@

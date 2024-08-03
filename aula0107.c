@@ -1,0 +1,652 @@
+/*******************************************************************************
+ *
+ * Universidade Federal do Rio de Janeiro
+ * Escola Politecnica
+ * Departamento de Eletronica e de Computacao
+ * Prof. Marcelo Luiz Drumond Lanza
+ * EEL270 - Computacao II - Turma 2024/1
+ *
+ * Descricao: Arquivo responsavel por exibir os tamanhos dos "5" tipos básics, dos "2" modificadores de sinais, dos "3" modificadores de largura, dos "6" modificadores de sinal
+ *  combinados com modificadores de largura, dos "4" tipos basicos combinados com modificadores de sinal, dos "4" tipos basicos combinados com modificadores de largura
+ *  e dos "6" tipos basicos combinados com modificadores de sinal e com modificadores de largura.
+ *
+ * $Author: joao.vitor $
+ * $Date: 2024/04/22 06:29:52 $
+ * $Log: aula0107.c,v $
+ * Revision 1.1  2024/04/22 06:29:52  joao.vitor
+ * Initial revision
+ *
+ *
+ *******************************************************************************/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "cores.h"
+#include "aula0101.h"
+
+/*Definicao das Macros.*/
+#define SUCESSO				0
+#define TABULACAO_DAS_COLUNAS		1
+
+
+/*Inicializacao da Funcao Principal.*/
+int
+main(int argc, char *argv [])
+{
+	/*Inicializacao das Variaveis que representam as linhas e colunas da tela, respectivamente.*/
+	int linha, coluna;
+	
+	/*Inicializacao das Variaveis correspondentes ao Tamanho de cada Tipo e de suas combinacoes.*/
+	int tamanhoTipoVoid, tamanhoTipoChar, tamanhoTipoInt, tamanhoTipoFloat;
+	int tamanhoTipoDouble, tamanhoTipoSigned, tamanhoTipoUnsigned;
+	int tamanhoTipoShort, tamanhoTipoLong, tamanhoTipoLongLong;
+
+	int tamanhoTipoSignedShort, tamanhoTipoSignedLong, tamanhoTipoSignedLongLong;
+	int tamanhoTipoUnsignedShort, tamanhoTipoUnsignedLong, tamanhoTipoUnsignedLongLong;
+
+	int tamanhoTipoSignedChar, tamanhoTipoSignedInt;
+	int tamanhoTipoUnsignedChar, tamanhoTipoUnsignedInt;
+
+	int tamanhoTipoShortInt, tamanhoTipoLongInt;
+	int tamanhoTipoLongDouble, tamanhoTipoLongLongInt;
+
+	int tamanhoTipoSignedShortInt, tamanhoTipoSignedLongInt, tamanhoTipoSignedLongLongInt;
+	int tamanhoTipoUnsignedShortInt, tamanhoTipoUnsignedLongInt, tamanhoTipoUnsignedLongLongInt;
+	
+	/*Inicializacao das Variaveis correspondentes aos argumentos que entrarao no "printf", sendo eles "byte" ou "bytes".
+	 * OBS: Como os argumentos recebem uma "string", as variaveis tem de ser um ponteiro para "char". 
+	 * 	Pois, elas apontarao para o endereco de memoria do primeiro caractere da "string" recebida, acessando assim o restante dos caracteres.*/
+	char *argumentoByteVoid, *argumentoByteChar, *argumentoByteInt, *argumentoByteFloat;
+	char *argumentoByteDouble, *argumentoByteSigned, *argumentoByteUnsigned;
+	char *argumentoByteShort, *argumentoByteLong, *argumentoByteLongLong;
+
+	char *argumentoByteSignedShort, *argumentoByteSignedLong, *argumentoByteSignedLongLong;
+	char *argumentoByteUnsignedShort, *argumentoByteUnsignedLong, *argumentoByteUnsignedLongLong;
+
+	char *argumentoByteSignedChar, *argumentoByteSignedInt;
+	char *argumentoByteUnsignedChar, *argumentoByteUnsignedInt;
+
+	char *argumentoByteShortInt, *argumentoByteLongInt;
+	char *argumentoByteLongDouble, *argumentoByteLongLongInt;
+
+	char *argumentoByteSignedShortInt, *argumentoByteSignedLongInt, *argumentoByteSignedLongLongInt;
+	char *argumentoByteUnsignedShortInt, *argumentoByteUnsignedLongInt, *argumentoByteUnsignedLongLongInt;
+	
+	/*A partir da funcao "sizeof", cada tamanho e armazenado em suas respectivas variaveis.*/
+	tamanhoTipoVoid = sizeof(void); 
+	tamanhoTipoChar = sizeof(char); 	
+	tamanhoTipoInt = sizeof(int); 
+	tamanhoTipoFloat = sizeof(float);
+	tamanhoTipoDouble = sizeof(double);      	
+	tamanhoTipoSigned = sizeof(signed);
+	tamanhoTipoUnsigned = sizeof(unsigned);
+	tamanhoTipoShort = sizeof(short);      	
+	tamanhoTipoLong = sizeof(long);
+	tamanhoTipoLongLong = sizeof(long long);
+
+	tamanhoTipoSignedShort = sizeof(signed short);      	
+	tamanhoTipoSignedLong = sizeof(signed long);
+	tamanhoTipoSignedLongLong = sizeof(signed long long); 
+	tamanhoTipoUnsignedShort = sizeof(unsigned short);      	
+	tamanhoTipoUnsignedLong = sizeof(unsigned long);
+	tamanhoTipoUnsignedLongLong = sizeof(unsigned long long);
+     	
+	tamanhoTipoSignedChar = sizeof(signed char);      	
+	tamanhoTipoSignedInt = sizeof(signed int);         	
+	tamanhoTipoUnsignedChar = sizeof(unsigned char);      	
+	tamanhoTipoUnsignedInt = sizeof(unsigned int); 
+
+	tamanhoTipoShortInt = sizeof(short int);
+	tamanhoTipoLongInt = sizeof(long int);
+	tamanhoTipoLongDouble = sizeof(long double);
+	tamanhoTipoLongLongInt = sizeof(long long int);
+
+	tamanhoTipoSignedShortInt = sizeof(signed short int);         	
+	tamanhoTipoSignedLongInt = sizeof(signed long int);         	
+	tamanhoTipoSignedLongLongInt = sizeof(signed long long int);  
+	tamanhoTipoUnsignedShortInt = sizeof(unsigned short int);         	
+	tamanhoTipoUnsignedLongInt = sizeof(unsigned long int);         	
+	tamanhoTipoUnsignedLongLongInt = sizeof(unsigned long long int);         	
+	
+	/*Variaveis que armazenam os argumentos que entrarao no "printf" de cada Tipo.*/
+	/*Caso o tamanho do tipo for maior que "1", o argumento entrara no "printf" sera "bytes".
+	 * Caso for igual a "1", o argumento que entrara no "printf" sera "byte".*/
+	argumentoByteVoid = tamanhoTipoVoid > 1? "bytes" : "byte";
+	argumentoByteChar = tamanhoTipoChar > 1? "bytes" : "byte";
+	argumentoByteInt = tamanhoTipoInt > 1? "bytes" : "byte";
+	argumentoByteFloat = tamanhoTipoFloat > 1? "bytes" : "byte";
+	argumentoByteDouble = tamanhoTipoDouble > 1? "bytes" : "byte";
+	argumentoByteSigned = tamanhoTipoSigned > 1? "bytes" : "byte";
+	argumentoByteUnsigned = tamanhoTipoUnsigned > 1? "bytes" : "byte";
+	argumentoByteShort = tamanhoTipoShort > 1? "bytes" : "byte";
+	argumentoByteLong = tamanhoTipoLong > 1? "bytes" : "byte";
+	argumentoByteLongLong = tamanhoTipoLongLong > 1? "bytes" : "byte";
+
+	argumentoByteSignedShort = tamanhoTipoSignedShort > 1? "bytes" : "byte";
+	argumentoByteSignedLong = tamanhoTipoSignedLong > 1? "bytes" : "byte";
+	argumentoByteSignedLongLong = tamanhoTipoSignedLongLong > 1? "bytes" : "byte";
+	argumentoByteUnsignedShort = tamanhoTipoUnsignedShort > 1? "bytes" : "byte";
+	argumentoByteUnsignedLong = tamanhoTipoUnsignedLong > 1? "bytes" : "byte";
+	argumentoByteUnsignedLongLong = tamanhoTipoUnsignedLongLong > 1? "bytes" : "byte";
+
+	argumentoByteSignedChar = tamanhoTipoSignedChar > 1? "bytes" : "byte";
+	argumentoByteSignedInt = tamanhoTipoSignedInt > 1? "bytes" : "byte";
+	argumentoByteUnsignedChar = tamanhoTipoUnsignedChar > 1? "bytes" : "byte";
+	argumentoByteUnsignedInt = tamanhoTipoUnsignedInt > 1? "bytes" : "byte";
+
+	argumentoByteShortInt = tamanhoTipoShortInt > 1? "bytes" : "byte";
+	argumentoByteLongInt = tamanhoTipoLongInt > 1? "bytes" : "byte";
+	argumentoByteLongDouble = tamanhoTipoLongDouble > 1? "bytes" : "byte";
+	argumentoByteLongLongInt = tamanhoTipoLongLongInt > 1? "bytes" : "byte";
+
+	argumentoByteSignedShortInt = tamanhoTipoSignedShortInt > 1? "bytes" : "byte";
+	argumentoByteSignedLongInt = tamanhoTipoSignedLongInt > 1? "bytes" : "byte";
+	argumentoByteSignedLongLongInt = tamanhoTipoSignedLongLongInt > 1? "bytes" : "byte";
+	argumentoByteUnsignedShortInt = tamanhoTipoUnsignedShortInt > 1? "bytes" : "byte";
+	argumentoByteUnsignedLongInt = tamanhoTipoUnsignedLongInt > 1? "bytes" : "byte";
+	argumentoByteUnsignedLongLongInt = tamanhoTipoUnsignedLongLongInt > 1? "bytes" : "byte";
+
+	/*Funcao que exibe uma certa quantidade de hifens, sendo ela inserida dentro dos parenteses.
+	 * Nesse caso, exibem-se "100" hifens.*/
+	ExibirHifens(100);
+	
+	/*Exibicao do titulo referente aos Tamanhos dos Tipos Basicos.*/
+	printf ("%sTamanhos dos Tipos Basicos%s\n\n", UNDERLINE_WHITE, RESET);	
+	
+	/*Estrutura de Repeticao que passa pelas linhas de cada Tipo Basico, sendo cada linha representada por "linha".*/
+	for(linha = 0; linha <= 4; linha++)
+	{	
+		/*Estrutura de Repeticao que passa por todas as colunas da tela, senda cada coluna representada por "coluna".*/
+		for(coluna = 0; coluna <= 99; coluna++)
+		{
+			/*O Tipo Basico "void" e seu tamanho sao exibidos na primeira linha.*/
+			if (linha == 0)
+			{
+				if (coluna == 0)
+					printf ("%svoid:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoVoid, RESET, YELLOW, argumentoByteVoid, RESET);
+				
+				if ((coluna > 4) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}
+			
+			/*O Tipo Basico "char" e seu tamanho sao exibidos na segunda linha.*/
+			if (linha == 1)
+			{
+				if (coluna == 0)
+					printf ("%schar:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoChar, RESET, YELLOW, argumentoByteChar, RESET);
+				
+				if ((coluna > 4) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}
+			
+			/*O Tipo Basico "int" e seu tamanho sao exibidos na terceira linha.*/
+			if (linha == 2)
+			{
+				if (coluna == 0)
+					printf ("%sint:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoInt, RESET, YELLOW, argumentoByteInt, RESET);
+				
+				if ((coluna > 3) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}
+			
+			/*O Tipo Basico "float" e seu tamanho sao exibidos na quarta linha.*/
+			if (linha == 3)
+			{
+				if (coluna == 0)
+					printf ("%sfloat:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoFloat, RESET, YELLOW, argumentoByteFloat, RESET);
+				
+				if ((coluna > 5) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}
+			
+			/*O Tipo Basico "double" e seu tamanho sao exibidos na quinta linha.*/
+			if (linha == 4)
+			{
+				if (coluna == 0)
+					printf ("%sdouble:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoDouble, RESET, YELLOW, argumentoByteDouble, RESET);
+				
+				if ((coluna > 6) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}
+		}
+	}
+
+	/*Funcao que exibe uma certa quantidade de hifens, sendo ela inserida dentro dos parenteses.
+	 * Nesse caso, exibem-se "100" hifens.*/
+	ExibirHifens(100);
+	
+	/*Exibicao do titulo referente aos Tamanhos dos Modificadores de Sinal.*/
+	printf ("%sTamanhos dos Modificadores de Sinal%s\n\n", UNDERLINE_WHITE, RESET);	
+	
+	/*Estrutura de Repeticao que passa pelas linhas de cada Modificador de Sinal, sendo cada linha representada por "linha".*/
+	for(linha = 0; linha <= 1; linha++)
+	{	
+		/*Estrutura de Repeticao que passa por todas as colunas da tela, senda cada coluna representada por "coluna".*/
+		for(coluna = 0; coluna <= 99; coluna++)
+		{
+			/*O Modificador de Sinal "signed" e seu tamanho sao exibidos na primeira linha.*/
+			if (linha == 0)
+			{
+				if (coluna == 0)
+					printf ("%ssigned:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoSigned, RESET, YELLOW, argumentoByteSigned, RESET);
+				
+				if ((coluna > 6) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}
+			
+			/*O Modificador de Sinal "unsigned" e seu tamanho sao exibidos na segunda linha.*/
+			if (linha == 1)
+			{
+				if (coluna == 0)
+					printf ("%sunsigned:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoUnsigned, RESET, YELLOW, argumentoByteUnsigned, RESET);
+				
+				if ((coluna > 8) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}	
+		}
+	}
+
+	/*Funcao que exibe uma certa quantidade de hifens, sendo ela inserida dentro dos parenteses.
+	 * Nesse caso, exibem-se "100" hifens.*/
+	ExibirHifens(100);
+	
+	/*Exibicao do titulo referente aos Tamanhos dos Modificadores de Largura.*/
+	printf ("%sTamanhos dos Modificadores de Largura%s\n\n", UNDERLINE_WHITE, RESET);
+
+	/*Estrutura de Repeticao que passa pelas linhas de cada Modificador de Largura, sendo cada linha representada por "linha".*/
+	for(linha = 0; linha <= 2; linha++)
+	{	
+		/*Estrutura de Repeticao que passa por todas as colunas da tela, senda cada coluna representada por "coluna".*/
+		for(coluna = 0; coluna <= 99; coluna++)
+		{
+			/*O Modificador de Largura "short" e seu tamanho sao exibidos na primeira linha.*/
+			if (linha == 0)
+			{
+				if (coluna == 0)
+					printf ("%sshort:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoShort, RESET, YELLOW, argumentoByteShort, RESET);
+				
+				if ((coluna > 5) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}
+			
+			/*O Modificador de Largura "long" e seu tamanho sao exibidos na segunda linha.*/
+			if (linha == 1)
+			{
+				if (coluna == 0)
+					printf ("%slong:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoLong, RESET, YELLOW, argumentoByteLong, RESET);
+				
+				if ((coluna > 4) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}
+			
+			/*O Modificador de Largura "long long" e seu tamanho sao exibidos na terceira linha.*/
+			if (linha == 2)
+			{
+				if (coluna == 0)
+					printf ("%slong long:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoLongLong, RESET, YELLOW, argumentoByteLongLong, RESET);
+				
+				if ((coluna > 9) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}	
+		}
+	}
+	
+	/*Funcao que exibe uma certa quantidade de hifens, sendo ela inserida dentro dos parenteses.
+	 * Nesse caso, exibem-se "100" hifens.*/
+	ExibirHifens(100);
+		
+	/*Exibicao do titulo referente aos Tamanhos dos Modificadores de Sinal combinados com Modificadores de Largura.*/
+	printf ("%sTamanhos dos Modificadores de Sinal combinados com Modificadores de Largura%s\n\n", UNDERLINE_WHITE, RESET);
+	
+	/*Estrutura de Repeticao que passa pelas linhas de cada Modificador de Sinal combinado com Modificador de Largura, sendo cada linha representada por "linha".*/
+	for(linha = 0; linha <= 5; linha++)
+	{	
+		/*Estrutura de Repeticao que passa por todas as colunas da tela, senda cada coluna representada por "coluna".*/
+		for(coluna = 0; coluna <= 99; coluna++)
+		{
+			/*O Modificador de Sinal combinado com o Modificador de Largura "signed short" e seu tamanho sao exibidos na primeira linha.*/
+			if (linha == 0)
+			{
+				if (coluna == 0)
+					printf ("%ssigned short:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoSignedShort, RESET, YELLOW, argumentoByteSignedShort, RESET);
+				
+				if ((coluna > 12) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}
+			
+			/*O Modificador de Sinal combinado com o Modificador de Largura "signed long" e seu tamanho sao exibidos na segunda linha.*/
+			if (linha == 1)
+			{
+				if (coluna == 0)
+					printf ("%ssigned long:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoSignedLong, RESET, YELLOW, argumentoByteSignedLong, RESET);
+				
+				if ((coluna > 11) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}
+			
+			/*O Modificador de Sinal combinado com o Modificador de Largura "signed long long" e seu tamanho sao exibidos na terceira linha.*/
+			if (linha == 2)
+			{
+				if (coluna == 0)
+					printf ("%ssigned long long:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoSignedLongLong, RESET, YELLOW, argumentoByteSignedLongLong, RESET);
+				
+				if ((coluna > 16) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}
+			
+			/*O Modificador de Sinal combinado com o Modificador de Largura "unsigned short" e seu tamanho sao exibidos na quarta linha.*/
+			if (linha == 3)
+			{
+				if (coluna == 0)
+					printf ("%sunsigned short:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoUnsignedShort, RESET, YELLOW, argumentoByteUnsignedShort, RESET);
+				
+				if ((coluna > 14) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}
+			
+			/*O Modificador de Sinal combinado com o Modificador de Largura "unsigned long" e seu tamanho sao exibidos na quinta linha.*/
+			if (linha == 4)
+			{
+				if (coluna == 0)
+					printf ("%sunsigned long:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoUnsignedLong, RESET, YELLOW, argumentoByteUnsignedLong, RESET);
+				
+				if ((coluna > 13) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}
+
+			/*O Modificador de Sinal combinado com o Modificador de Largura "unsigned long long" e seu tamanho sao exibidos na sexta linha.*/
+			if (linha == 5)
+			{
+				if (coluna == 0)
+					printf ("%sunsigned long long:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoUnsignedLongLong, RESET, YELLOW, argumentoByteUnsignedLongLong, RESET);
+				
+				if ((coluna > 18) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}
+		}
+	}
+	
+	/*Funcao que exibe uma certa quantidade de hifens, sendo ela inserida dentro dos parenteses.
+	 * Nesse caso, exibem-se "100" hifens.*/
+	ExibirHifens(100);
+		
+	/*Exibicao do titulo referente aos Tamanhos dos Tipos Basicos combinados com Modificadores de Sinal.*/
+	printf ("%sTamanhos dos Tipos Basicos combinados com Modificadores de Sinal%s\n\n", UNDERLINE_WHITE, RESET);
+	
+	/*Estrutura de Repeticao que passa pelas linhas de cada Tipo Basico combinado com Modificador de Sinal, sendo cada linha representada por "linha".*/
+	for(linha = 0; linha <= 3; linha++)
+	{	
+		/*Estrutura de Repeticao que passa por todas as colunas da tela, senda cada coluna representada por "coluna".*/
+		for(coluna = 0; coluna <= 99; coluna++)
+		{			
+			/*O Tipo Basico combinado com o Modificador de Sinal "signed char" e seu tamanho sao exibidos na primeira linha.*/
+			if (linha == 0)
+			{
+				if (coluna == 0)
+					printf ("%ssigned char:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoSignedChar, RESET, YELLOW, argumentoByteSignedChar, RESET);
+				
+				if ((coluna > 11) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}
+			
+			/*O Tipo Basico combinado com o Modificador de Sinal "signed int" e seu tamanho sao exibidos na segunda linha.*/
+			if (linha == 1)
+			{
+				if (coluna == 0)
+					printf ("%ssigned int:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoSignedInt, RESET, YELLOW, argumentoByteSignedInt, RESET);
+				
+				if ((coluna > 10) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}
+						
+			/*O Tipo Basico combinado com o Modificador de Sinal "unsigned char" e seu tamanho sao exibidos na terceira linha.*/
+			if (linha == 2)
+			{
+				if (coluna == 0)
+					printf ("%sunsigned char:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoUnsignedChar, RESET, YELLOW, argumentoByteUnsignedChar, RESET);
+				
+				if ((coluna > 13) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}
+
+			/*O Tipo Basico combinado com o Modificador de Sinal "unsigned int" e seu tamanho sao exibidos na quarta linha.*/
+			if (linha == 3)
+			{
+				if (coluna == 0)
+					printf ("%sunsigned int:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoUnsignedInt, RESET, YELLOW, argumentoByteUnsignedInt, RESET);
+				
+				if ((coluna > 12) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}
+		}
+	}
+
+	/*Funcao que exibe uma certa quantidade de hifens, sendo ela inserida dentro dos parenteses.
+	 * Nesse caso, exibem-se "100" hifens.*/
+	ExibirHifens(100);
+		
+	/*Exibicao do titulo referente aos Tamanhos dos Tipos Basicos combinados com Modificadores de Largura.*/
+	printf ("%sTamanhos dos Tipos Basicos combinados com Modificadores de Largura%s\n\n", UNDERLINE_WHITE, RESET);
+	
+	/*Estrutura de Repeticao que passa pelas linhas de cada Tipo Basico combinado com Modificador de Largura, sendo cada linha representada por "linha".*/
+	for(linha = 0; linha <= 3; linha++)
+	{	
+		/*Estrutura de Repeticao que passa por todas as colunas da tela, senda cada coluna representada por "coluna".*/
+		for(coluna = 0; coluna <= 99; coluna++)
+		{			
+			/*O Tipo Basico combinado com o Modificador de Largura "short int" e seu tamanho sao exibidos na primeira linha.*/
+			if (linha == 0)
+			{
+				if (coluna == 0)
+					printf ("%sshort int:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoShortInt, RESET, YELLOW, argumentoByteShortInt, RESET);
+				
+				if ((coluna > 9) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}
+			
+			/*O Tipo Basico combinado com o Modificador de Largura "long int" e seu tamanho sao exibidos na segunda linha.*/
+			if (linha == 1)
+			{
+				if (coluna == 0)
+					printf ("%slong int:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoLongInt, RESET, YELLOW, argumentoByteLongInt, RESET);
+				
+				if ((coluna > 8) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}
+						
+			/*O Tipo Basico combinado com o Modificador de Largura "long double" e seu tamanho sao exibidos na terceira linha.*/
+			if (linha == 2)
+			{
+				if (coluna == 0)
+					printf ("%slong double:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoLongDouble, RESET, YELLOW, argumentoByteLongDouble, RESET);
+				
+				if ((coluna > 11) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}
+
+			/*O Tipo Basico combinado com o Modificador de Largura "long long int" e seu tamanho sao exibidos na quarta linha.*/
+			if (linha == 3)
+			{
+				if (coluna == 0)
+					printf ("%slong long int:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoLongLongInt, RESET, YELLOW, argumentoByteLongLongInt, RESET);
+				
+				if ((coluna > 13) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}
+		}
+	}
+		
+	/*Funcao que exibe uma certa quantidade de hifens, sendo ela inserida dentro dos parenteses.
+	 * Nesse caso, exibem-se "100" hifens.*/
+	ExibirHifens(100);
+		
+	/*Exibicao do titulo referente aos Tamanhos dos Tipos Basicos combinados com Modificadores de Sinal e com Modificadores de Largura.*/
+	printf ("%sTamanhos dos Tipos Basicos combinados com Modificadores de Sinal e com Modificadores de Largura%s\n\n", UNDERLINE_WHITE, RESET);
+	
+	/*Estrutura de Repeticao que passa pelas linhas de cada Tipo Basico combinado com Modificador de Sinal e com Modificador de Largura, sendo cada linha representada por "linha".*/
+	for(linha = 0; linha <= 5; linha++)
+	{	
+		/*Estrutura de Repeticao que passa por todas as colunas da tela, senda cada coluna representada por "coluna".*/
+		for(coluna = 0; coluna <= 99; coluna++)
+		{
+			/*O Tipo Basico combinado com Modificador de Sinal e com Modificador de Largura "signed short int" e seu tamanho sao exibidos na primeira linha.*/
+			if (linha == 0)
+			{
+				if (coluna == 0)
+					printf ("%ssigned short int:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoSignedShortInt, RESET, YELLOW, argumentoByteSignedShortInt, RESET);
+				
+				if ((coluna > 16) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}
+			
+			/*O Tipo Basico combinado com Modificador de Sinal e com Modificador de Largura "signed long int" e seu tamanho sao exibidos na segunda linha.*/
+			if (linha == 1)
+			{
+				if (coluna == 0)
+					printf ("%ssigned long int:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoSignedLongInt, RESET, YELLOW, argumentoByteSignedLongInt, RESET);
+				
+				if ((coluna > 15) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}
+			
+			/*O Tipo Basico combinado com Modificador de Sinal e com Modificador de Largura "signed long long int" e seu tamanho sao exibidos na terceira linha.*/
+			if (linha == 2)
+			{
+				if (coluna == 0)
+					printf ("%ssigned long long int:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoSignedLongLongInt, RESET, YELLOW, argumentoByteSignedLongLongInt, RESET);
+				
+				if ((coluna > 20) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}
+			
+			/*O Tipo Basico combinado com Modificador de Sinal e com Modificador de Largura "unsigned short int" e seu tamanho sao exibidos na quarta linha.*/
+			if (linha == 3)
+			{
+				if (coluna == 0)
+					printf ("%sunsigned short int:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoUnsignedShortInt, RESET, YELLOW, argumentoByteUnsignedShortInt, RESET);
+				
+				if ((coluna > 18) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}
+			
+			/*O Tipo Basico combinado com Modificador de Sinal e com Modificador de Largura "unsigned long int" e seu tamanho sao exibidos na quinta linha.*/
+			if (linha == 4)
+			{
+				if (coluna == 0)
+					printf ("%sunsigned long int:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoUnsignedLongInt, RESET, YELLOW, argumentoByteUnsignedLongInt, RESET);
+				
+				if ((coluna > 17) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}
+
+			/*O Tipo Basico combinado com Modificador de Sinal e com Modificador de Largura "unsigned long long int" e seu tamanho sao exibidos na sexta linha.*/
+			if (linha == 5)
+			{
+				if (coluna == 0)
+					printf ("%sunsigned long long int:%s", GREEN, RESET);
+
+				if (coluna == 92)
+					printf ("%s%d%s %s%s%s\n", YELLOW, tamanhoTipoUnsignedLongLongInt, RESET, YELLOW, argumentoByteUnsignedLongLongInt, RESET);
+				
+				if ((coluna > 22) && (coluna < 92))
+					printf ("%s%d%s", BLACK, TABULACAO_DAS_COLUNAS, RESET);	
+			}
+		}
+	}
+	
+	/*Funcao que exibe uma certa quantidade de hifens, sendo ela inserida dentro dos parenteses.
+	 * Nesse caso, exibem-se "100" hifens.*/
+	ExibirHifens(100);
+
+	return SUCESSO;
+}
+
+/* $RCSfile: aula0107.c,v $ */

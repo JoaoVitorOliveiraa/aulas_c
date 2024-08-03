@@ -1,0 +1,295 @@
+head	1.6;
+access;
+symbols;
+locks; strict;
+comment	@ * @;
+
+
+1.6
+date	2024.07.23.02.01.04;	author joao.vitor;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2024.07.21.16.31.04;	author joao.vitor;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2024.07.21.16.27.10;	author joao.vitor;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2024.07.21.15.54.11;	author joao.vitor;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2024.07.20.22.18.10;	author joao.vitor;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2024.07.19.22.34.44;	author joao.vitor;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@alteracao de macro
+@
+text
+@/*******************************************************************************
+ *
+ * Universidade Federal do Rio de Janeiro
+ * Escola Politecnica
+ * Departamento de Eletronica e de Computacao
+ * Prof. Marcelo Luiz Drumond Lanza
+ * EEL270 - Computacao II - Turma 2024/1
+ *
+ * Descricao: Arquivo reponsavel por prototipos de funcoes, definicao de macros e atribuicoes de tipos para algum termo.
+ *
+ * $Author: joao.vitor $
+ * $Date: 2024/07/21 16:31:04 $
+ * $Log: aula0701.h,v $
+ * Revision 1.5  2024/07/21 16:31:04  joao.vitor
+ * adicao da funcao de preencher poligono
+ *
+ * Revision 1.4  2024/07/21 16:27:10  joao.vitor
+ * adicao da funcao de desenhar poligono
+ *
+ * Revision 1.3  2024/07/21 15:54:11  joao.vitor
+ * adicao da funcao de desenhar reta
+ *
+ * Revision 1.1  2024/07/19 22:34:44  joao.vitor
+ * Initial revision
+ *
+ *
+ *******************************************************************************/
+
+/*Caso a macro "AULA0701" nao tenha sido definida, o que esta abaixo sera executado.*/
+#ifndef AULA0701
+
+/*Definicao da macro "AULA0701".*/
+#define AULA0701			"@@(#)aula0701.h $Revision: 1.5 $"
+
+#if defined (__FreeBSD__) && defined (__STRICT_ANSI__)
+#define __LONG_LONG_SUPPORTED
+#endif
+
+#ifdef __linux__
+#define _XOPEN_SOURCE 600
+#endif
+
+/*Definicoes de macros.*/
+#define	APAGADO				' '			
+#define	ACESO				' '			
+#define	DEFEITUOSO			'.'
+#define NUMERO_MAXIMO_LINHAS		250
+#define NUMERO_MAXIMO_COLUNAS		800
+#define NUMERO_MAXIMO_VERTICES		50
+
+/*Include's*/
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <time.h>
+#include "cores.h"
+
+/*Atribuicoes de tipos a termos.*/
+typedef unsigned short us;
+typedef enum
+{
+	fundo,
+	texto
+} 
+tipoFundoTexto;
+
+typedef enum
+{
+	apagado,
+	aceso,
+	defeituoso = -1
+}
+tipoPixel;
+
+typedef enum
+{
+	ok,
+	enderecoDaMatrizInvalido,
+	numeroDeLinhasInvalido,
+	numeroDeColunasInvalido,
+	coresIguais,
+	percentualDefeituososInvalido,
+	percentualApagadosInvalido,
+	dimensaoInvalida,
+	numeroVerticesInvalido
+}
+tipoErros;
+
+/*Prototipos de funcoes.*/
+char *
+ObterCodigoAnsiCor (char *nomeCor, tipoFundoTexto fundoTexto);
+
+tipoErros
+MostrarMonitor (useconds_t tempoEspera, 
+ 		tipoPixel monitor [NUMERO_MAXIMO_LINHAS][NUMERO_MAXIMO_COLUNAS],
+		unsigned numeroLinhas, 
+		unsigned numeroColunas,
+		char *corFundo,  
+		char *corPixelApagado, 
+		char *corPixelAceso,
+		char *corPixelDefeituoso);
+
+tipoErros
+GerarDistribuicaoInicial (tipoPixel monitor [NUMERO_MAXIMO_LINHAS][NUMERO_MAXIMO_COLUNAS],
+			  unsigned numeroLinhas,
+			  unsigned numeroColunas,
+			  float percentualDefeituosos,
+			  float percentualApagados);
+
+tipoErros
+LimparMonitor (tipoPixel monitor [NUMERO_MAXIMO_LINHAS][NUMERO_MAXIMO_COLUNAS],
+		unsigned numeroLinhas,
+		unsigned numeroColunas,
+		char *corFundo,
+		char *corPixelApagado,
+		char *corPixelAceso,
+		char *corPixelDefeituoso);
+
+tipoErros
+DesenharReta (tipoPixel monitor [NUMERO_MAXIMO_LINHAS][NUMERO_MAXIMO_COLUNAS],
+		unsigned numeroLinhas,
+		unsigned numeroColunas,
+		unsigned linhaA,
+		unsigned colunaA,
+		unsigned linhaB,
+		unsigned colunaB,
+		char *corFundo,
+		char *corPixelApagado,
+		char *corPixelAceso,
+		char *corPixelDefeituoso);
+
+tipoErros
+DesenharPoligono (tipoPixel monitor [NUMERO_MAXIMO_LINHAS][NUMERO_MAXIMO_COLUNAS],
+		  unsigned numeroLinhas,
+		  unsigned numeroColunas,
+		  unsigned numeroVertices,
+		  unsigned linhasVertices [NUMERO_MAXIMO_VERTICES],
+		  unsigned colunasVertices [NUMERO_MAXIMO_VERTICES],
+		  char *corFundo,
+		  char *corPixelApagado,
+		  char *corPixelAceso,
+		  char *corPixelDefeituoso);
+
+tipoErros
+PreencherPoligono (useconds_t tempoEspera,
+		   tipoPixel monitor [NUMERO_MAXIMO_LINHAS][NUMERO_MAXIMO_COLUNAS],
+		   unsigned numeroLinhas, 
+		   unsigned numeroColunas, 
+		   unsigned linha, 
+		   unsigned coluna, 
+		   char *corFundo, 
+		   char *corPixelApagado, 
+		   char *corPixelAceso,
+		   char *corPixelDefeituoso);
+
+/*Fim da condicao.*/
+#endif
+
+/* $RCSfile: aula0701.h,v $ */
+@
+
+
+1.5
+log
+@adicao da funcao de preencher poligono
+@
+text
+@d12 1
+a12 1
+ * $Date: 2024/07/21 16:27:10 $
+d14 3
+d33 1
+a33 1
+#define AULA0701			"@@(#)aula0701.h $Revision: 1.4 $"
+d40 1
+a40 1
+#define _XOPEN_SOURCE 500
+@
+
+
+1.4
+log
+@adicao da funcao de desenhar poligono
+@
+text
+@d12 1
+a12 1
+ * $Date: 2024/07/21 15:54:11 $
+d14 3
+d30 1
+a30 1
+#define AULA0701			"@@(#)aula0701.h $Revision: 1.3 $"
+d130 1
+a130 1
+DesenharPoligono (tipoPixel monitor [NUMERO_MAXIMO_LINHAS ][NUMERO_MAXIMO_COLUNAS],
+d141 11
+@
+
+
+1.3
+log
+@adicao da funcao de desenhar reta
+@
+text
+@d12 1
+a12 1
+ * $Date: 2024/07/19 22:34:44 $
+d14 3
+d27 1
+a27 1
+#define AULA0701			"@@(#)aula0701.h $Revision: 1.1 $"
+d78 2
+a79 1
+	dimensaoInvalida
+d126 13
+@
+
+
+1.2
+log
+@adicao da funcao LimparMonitor
+@
+text
+@d74 2
+a75 1
+	percentualApagadosInvalido
+d109 13
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d11 6
+a16 3
+ * $Author$
+ * $Date$
+ * $Log$
+d24 1
+a24 1
+#define AULA0701			"@@(#)aula0701.h $Revision$"
+d99 9
+d111 1
+a111 1
+/* $RCSfile$ */
+@

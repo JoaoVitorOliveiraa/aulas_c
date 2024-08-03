@@ -1,0 +1,207 @@
+/*******************************************************************************
+ *
+ * Universidade Federal do Rio de Janeiro
+ * Escola Politecnica
+ * Departamento de Eletronica e de Computacao
+ * Prof. Marcelo Luiz Drumond Lanza
+ * EEL270 - Computacao II - Turma 2024/1
+ *
+ * Descricao: Codigo-Fonte de um programa de testes para a funcao "CalcularMenorComplementar".
+ *
+ * $Author: joao.vitor $
+ * $Date: 2024/06/10 08:50:42 $
+ * $Log: aula0506.c,v $
+ * Revision 1.1  2024/06/10 08:50:42  joao.vitor
+ * Initial revision
+ *
+ *
+ *******************************************************************************/
+
+/*Include's.*/
+#include <stdlib.h>
+#include <limits.h>
+#include <errno.h>
+#include <float.h>
+
+#include "aula0501.h"
+
+/*Definicao das Macros.*/
+#define SUCESSO								0
+#define NUMERO_ARGUMENTOS_VALIDOS					4 + (NUMERO_MAXIMO_LINHAS * NUMERO_MAXIMO_COLUNAS)
+					
+#define NUMERO_ARGUMENTOS_INVALIDO					1
+#define ARGUMENTO_INSERIDO_INVALIDO					2
+#define NUMERO_ULTRAPASSOU_LIMITE_UNSIGNED_LONG				3
+#define INSERIDO_NUMERO_NEGATIVO					4
+#define NUMERO_ULTRAPASSOU_LIMITE_UNSIGNED_INT				5
+#define	NUMERO_LINHAS_E_COLUNAS_ULTRAPASSADO				6
+#define	NUMERO_LINHAS_ULTRAPASSADO					7
+#define	NUMERO_COLUNAS_ULTRAPASSADO					8
+#define NUMERO_ULTRAPASSOU_LIMITE_LONG_DOUBLE				9
+
+#define END_OF_STRING							'\0'
+
+/*Inicializacao da Funcao Principal.*/
+int
+main (int argc, char *argv [])
+{
+	/*Inicializacao das variaveis.*/
+	us linha, coluna, indexInicial;
+	us ordemMatriz, linhasRemovidas, colunasRemovidas;
+	ld valorMenorComplementar;
+	unsigned long ordemInserida, linhasInseridas, colunasInseridas;
+	char *validacaoOrdemMatriz, *validacaoLinhas;
+	char *validacaoColunas, *validacaoMatriz;
+
+	/*Caso o numero de argumentos inseridos for invalido, aparecera uma mensagem de erro.*/
+	if ((argc > NUMERO_ARGUMENTOS_VALIDOS) || (argc < 3))
+	{
+		printf ("\n%sErro! Numero invalido de argumentos.%s\n\n", RED, RESET);
+		exit (NUMERO_ARGUMENTOS_INVALIDO);
+	}
+	
+	/*Converte a ordem inserida em um valor real do tipo unsigned long.*/
+	ordemInserida = strtoul(argv [1], &validacaoOrdemMatriz, 10);
+	
+	/*Caso a ordem inserida nao for um numero, aparecera uma mensagem de erro.*/
+	if (*validacaoOrdemMatriz != END_OF_STRING)
+	{
+		printf ("\n%sErro! Ordem da matriz invalida.%s\n\n", RED, RESET);
+		exit (ARGUMENTO_INSERIDO_INVALIDO);
+	}
+	
+	/*Caso a ordem da matriz for negativa, aparecera uma mensagem de erro.*/
+	if (argv [1][0] == '-') 
+	{
+		printf ("\n%sErro! A ordem da matriz deve ser um valor positivo.%s\n\n", RED, RESET);
+		exit (INSERIDO_NUMERO_NEGATIVO);
+	}	
+
+	/*Caso a ordem inserida ultrapasse o limite do tipo unsigned long, aparecera uma mensagem de erro.*/	
+	if (errno == ERANGE)
+	{
+		printf ("\n%sErro! A ordem da matriz excedeu o limite do tipo Unsigned Long (%lu).%s\n\n", RED, ULONG_MAX, RESET); 
+		exit (NUMERO_ULTRAPASSOU_LIMITE_UNSIGNED_LONG);
+	}
+
+	/*Caso a ordem inserida esteja fora do limite do tipo unsigned int, aparecera uma mensagem de erro.*/
+	if (ordemInserida > USHRT_MAX) 
+	{ 
+		printf ("\n%sErro! A ordem inserida ultrapassou o limite do tipo Unsigned Short (%d).%s\n\n", RED, USHRT_MAX, RESET);
+		exit (NUMERO_ULTRAPASSOU_LIMITE_UNSIGNED_INT);
+	}
+
+	/*Caso a ordem inserida esteja fora do limite suportado, aparecera uma mensagem de erro.*/
+	if (ordemInserida > NUMERO_MAXIMO_LINHAS) 
+	{ 
+		printf ("\n%sErro! A ordem inserida ultrapassou o limite suportado.\nPor favor, insira uma que esteja entre 1 e 100.%s\n\n", RED, RESET);
+		exit (NUMERO_LINHAS_ULTRAPASSADO);
+	}
+
+	/*Converte as linhas inseridas em um valor inteiro do tipo unsigned long.*/
+	linhasInseridas = strtoul(argv [2], &validacaoLinhas, 10);
+	
+	/*Caso as linhas inseridas nao form numeros, aparecera uma mensagem de erro.*/
+	if (*validacaoLinhas != END_OF_STRING)
+	{
+		printf ("\n%sErro! Numero de linhas invalido.%s\n\n", RED, RESET);
+		exit (ARGUMENTO_INSERIDO_INVALIDO);
+	}
+
+	/*Caso o numero de linhas for negativo, aparecera uma mensagem de erro.*/
+	if (argv [2][0] == '-')
+	{
+		printf ("\n%sErro! Numero de linhas invalido.\nPor favor, insira somente numeros positivos.%s\n\n", RED, RESET);
+		exit (INSERIDO_NUMERO_NEGATIVO);
+	}	
+		
+	/*Caso o numero de linhas inserido ultrapasse o limite do tipo unsigned long, aparecera uma mensagem de erro.*/	
+	if (errno == ERANGE)
+	{
+		printf ("\n%sErro! O numero de linhas excedeu o limite do tipo Unsigned Long (%lu).%s\n\n", RED, ULONG_MAX, RESET); 
+		exit (NUMERO_ULTRAPASSOU_LIMITE_UNSIGNED_LONG);
+	}
+	
+	/*Caso as linhas inseridas estejam fora do limite do tipo unsigned int, aparecera uma mensagem de erro.*/
+	if (linhasInseridas > USHRT_MAX) 
+	{ 
+		printf ("\n%sErro! O numero de linhas inserido ultrapassou o limite do tipo Unsigned Short (%d).%s\n\n", RED, USHRT_MAX, RESET);
+		exit (NUMERO_ULTRAPASSOU_LIMITE_UNSIGNED_INT);
+	}
+	
+	/*Converte as colunas inseridas em um valor inteiro do tipo unsigned long.*/
+	colunasInseridas = strtoul(argv [3], &validacaoColunas, 10);
+	
+	/*Caso as colunas inseridas nao forem numeros, aparecera uma mensagem de erro.*/
+	if (*validacaoColunas != END_OF_STRING)
+	{
+		printf ("\n%sErro! Numero de colunas invalido.%s\n\n", RED, RESET);
+		exit (ARGUMENTO_INSERIDO_INVALIDO);
+	}
+
+	/*Caso o numero de colunas for negativo, aparecera uma mensagem de erro.*/
+	if (argv [3][0] == '-')
+	{
+		printf ("\n%sErro! Numero de colunas invalido.\nPor favor, insira somente numeros positivos.%s\n\n", RED, RESET);
+		exit (INSERIDO_NUMERO_NEGATIVO);
+	}	
+		
+	/*Caso o numero de colunas inserido ultrapasse o limite do tipo unsigned long, aparecera uma mensagem de erro.*/	
+	if (errno == ERANGE)
+	{
+		printf ("\n%sErro! O numero de colunas excedeu o limite do tipo Unsigned Long (%lu).%s\n\n", RED, ULONG_MAX, RESET); 
+		exit (NUMERO_ULTRAPASSOU_LIMITE_UNSIGNED_LONG);
+	}
+	
+	/*Caso as colunas inseridas estejam fora do limite do tipo unsigned int, aparecera uma mensagem de erro.*/
+	if (colunasInseridas > USHRT_MAX) 
+	{ 
+		printf ("\n%sErro! O numero de colunas inserido ultrapassou o limite do tipo Unsigned Short (%d).%s\n\n", RED, USHRT_MAX, RESET);
+		exit (NUMERO_ULTRAPASSOU_LIMITE_UNSIGNED_INT);
+	}
+
+	/*Armazena os valores das conversoes.*/
+	ordemMatriz = (us) ordemInserida;
+	linhasRemovidas = (us) linhasInseridas;
+	colunasRemovidas = (us) colunasInseridas;
+	
+
+	/*Condicao que verifica se o numeros de argumentos condiz.*/
+	if ((argc - 4) != (ordemMatriz * ordemMatriz))
+	{
+		printf ("\n%sErro! A quantidade de argumentos nao se adequa ao tamanho da matriz (%hu X %hu).%s\n\n", RED, ordemMatriz, ordemMatriz, RESET);
+		exit (NUMERO_ARGUMENTOS_INVALIDO);
+	}
+
+	/*Inicializacao de variaveis.*/
+	ld matriz [ordemMatriz][ordemMatriz];
+	indexInicial = 4;
+	
+
+	for (linha = 0; linha < ordemMatriz; linha++)
+		for (coluna = 0; coluna < ordemMatriz; coluna++)
+			matriz [linha][coluna] = strtold (argv[indexInicial], &validacaoMatriz);
+
+			/*Caso a matriz inserida possua um argumento invalido, aparecera uma mensagem de erro.*/
+			if (*validacaoMatriz != END_OF_STRING)
+			{
+				printf ("\n%sErro! A matriz inserida possui algum argumento invalido.%s\n\n", RED, RESET);
+				exit (ARGUMENTO_INSERIDO_INVALIDO);
+			}
+		
+	/*Caso algum argumento da matriz ultrapasse o limite do tipo long double, aparecera uma mensagem de erro.*/	
+	if (errno == ERANGE)
+	{
+		printf ("\n%sErro! Algum argumento da matriz excede os limites do tipo Long Double (%Lf).%s\n\n", RED, LDBL_MAX, RESET); 
+		exit (NUMERO_ULTRAPASSOU_LIMITE_LONG_DOUBLE);
+	}
+
+	/*Exibe o resultado na tela.*/
+	ExibirMatriz (ordemMatriz, ordemMatriz, matriz);
+	CalcularMenorComplementar (ordemMatriz, linhasRemovidas, colunasRemovidas, matriz, &valorMenorComplementar);
+	printf ("Menor Complementar (%hu, %hu) da Matriz: %Lf\n\n", linhasRemovidas, colunasRemovidas, valorMenorComplementar);
+
+	return SUCESSO;
+}
+
+/* $RCSfile: aula0506.c,v $ */

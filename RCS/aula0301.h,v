@@ -1,0 +1,100 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@ * @;
+
+
+1.2
+date	2024.05.10.18.58.53;	author joao.vitor;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2024.05.10.02.59.59;	author joao.vitor;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@Remocao das definicoes para o valor da macro ULLONG_MAX
+@
+text
+@/*******************************************************************************
+ *
+ * Universidade Federal do Rio de Janeiro
+ * Escola Politecnica
+ * Departamento de Eletronica e de Computacao
+ * Prof. Marcelo Luiz Drumond Lanza
+ * EEL270 - Computacao II - Turma 2024/1
+ *
+ * Descricao: Arquivo reponsavel por prototipos de funcoes, definicao de macros e atribuicoes de tipos para algum termo.
+ *
+ * $Author: joao.vitor $
+ * $Date: 2024/05/10 02:59:59 $
+ * $Log: aula0301.h,v $
+ * Revision 1.1  2024/05/10 02:59:59  joao.vitor
+ * Initial revision
+ *
+ *
+ *******************************************************************************/
+
+/*Caso a macro "AULA0301" nao tenha sido definida, o que esta abaixo sera executado.*/
+#ifndef AULA0301
+
+/*Definicao da macro "AULA0301".*/
+#define AULA0301			"@@(#)aula0301.h $Revision: 1.1 $"
+
+/*Atribuicoes de tipos a termos.*/
+typedef unsigned long long ull;
+typedef unsigned long ul;
+typedef unsigned short us;
+
+/*Prototipo da funcao "CalcularTermoSerieFibonacci".*/
+ull
+CalcularTermoSerieFibonacci (us);
+
+/*Fim da condicao.*/
+#endif
+
+/* $RCSfile: aula0301.h,v $ */
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d11 6
+a16 3
+ * $Author$
+ * $Date$
+ * $Log$
+d24 1
+a24 16
+#define AULA0301			"@@(#)aula0301.h $Revision$"
+
+/*Definicoes importantes para a utilizacao do valor "ULLONG_MAX".*/
+#if defined (__FreeBSD__) && defined (__STRICT_ANSI__)
+#define __LONG_LONG_SUPPORTED
+#endif
+
+#ifdef __linux__
+#define _XOPEN_SOURCE 600
+#endif
+
+/*Include das macros que definem os limites para inteiros.*/
+#include <limits.h>
+
+/*Macro correspondente ao caso onde o resultado da funcao CalcularTermoSerieFibonacci ultrapassa o limite do tipo unsigned long long.*/
+#define VALOR_ULTRAPASSOU_LIMITE_UNSIGNED_LONG_LONG			'1'
+d38 1
+a38 1
+/* $RCSfile$ */
+@
